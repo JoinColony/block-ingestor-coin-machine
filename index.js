@@ -168,7 +168,12 @@ const subsribeToCoinMachine = async (coinMachineAddress, provider) => {
           query: `
               mutation CreateCompanyAgreement {
                 createCompanyAgreement(
-                input: { coinMachineAddress: "${coinMachine}", userCompanyAgreementsId: "${owner}", agreementHash: "${agreementHash}" }
+                input: {
+                  coinMachineAddress: "${coinMachine}",
+                  userCompanyAgreementsId: "${owner}",
+                  agreementHash: "${agreementHash}",
+                  owner: "${owner}"
+                }
               ) {
                 coinMachineAddress
               }
