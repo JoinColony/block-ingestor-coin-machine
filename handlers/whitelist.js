@@ -6,11 +6,12 @@ function handleUserStatusCreate(
   status = null,
   agreement = null
 ) {
-  const input = status
-    ? `{ walletAddress: "${user}", approved: ${Boolean(
-        status
-      )}, whitelistId: "${whitelistAddress}" }`
-    : `{ walletAddress: "${user}", agreementSigned: true, whitelistId: "${whitelistAddress}" }`;
+  const input = `{
+          owner: "${user}"
+          walletAddress: "${user}",
+          whitelistId: "${whitelistAddress}",
+          ${status ? `approved: ${Boolean(status)}` : `agreementSigned: true`}
+       }`;
   const query = {
     operationName: "CreateUserStatusMutation",
     query: `
