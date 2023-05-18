@@ -46,9 +46,10 @@ async function handleCoinMachineInitialised(args, coinMachineAddress) {
 }
 
 const CoinMachineStatus = {
-  0: "ACTIVE",
-  1: "PAUSED",
-  2: "STOPPED",
+  0: "INACTIVE",
+  1: "ACTIVE",
+  2: "PAUSED",
+  3: "STOPPED",
 };
 
 async function handleCoinMachineStateSet(args, coinMachineAddress) {
