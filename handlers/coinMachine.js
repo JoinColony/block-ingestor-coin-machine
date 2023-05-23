@@ -52,7 +52,7 @@ const CoinMachineStatus = {
   3: "STOPPED",
 };
 
-async function handleCoinMachineStateSet(args, coinMachineAddress) {
+async function handleCoinMachineStateSet(args, coinMachineAddress, contract) {
   const querySaleByCoinMachineAddress = {
     operationName: "GetSalebyCoinMachineAddress",
     query: `
@@ -73,12 +73,25 @@ async function handleCoinMachineStateSet(args, coinMachineAddress) {
     const sale = result.data.getSalebyCoinMachineAddress.items[0];
     if (!sale) return [];
     const { state } = args;
+    let updateEndTime = "";
+
+    // state 3 === CoinMachineStatus.STOPPED
+    if (state === 3) {
+      const stoppedEndTime = await contract.endTime();
+      const endISO = new Date(stoppedEndTime * 1000).toISOString();
+      updateEndTime = `endDate: "${endISO}"`;
+    }
+
     const query = {
       operationName: "UpdateSaleMutation",
       query: `
             mutation UpdateSaleMutation {
               updateSale(
-              input: { id: "${sale.id}", coinMachineStatus: ${CoinMachineStatus[state]} }
+              input: {
+                id: "${sale.id}",
+                coinMachineStatus: ${CoinMachineStatus[state]}
+                ${updateEndTime}
+              }
             ) {
               id
             }
